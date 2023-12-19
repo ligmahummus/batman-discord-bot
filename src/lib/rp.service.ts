@@ -1,5 +1,4 @@
-import { Z_ASCII } from "zlib";
-import { PlayerCount, RPServer, RPServerResponse } from "./rp.service.type";
+import { type RPServer, type RPServerResponse } from "./rp.service.type";
 
 /**
  * Returns the current and total player count from the RP website.

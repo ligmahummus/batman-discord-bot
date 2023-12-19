@@ -1,8 +1,3 @@
-export type PlayerCount = {
-  current: string;
-  total: string;
-};
-
 export interface RPServerResponse {
   [key: string]: RPServer;
 }
