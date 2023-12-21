@@ -6,6 +6,8 @@ import { playerCount } from "./lib/rp.service";
 
 const client = new Client(clientOptions);
 
+// Created by xarielah@github
+
 /**
  * Event listener for when the client is ready.
  */
