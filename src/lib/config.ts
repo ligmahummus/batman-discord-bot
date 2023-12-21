@@ -1,4 +1,4 @@
-import { ClientOptions, GatewayIntentBits } from "discord.js";
+import { type ClientOptions, GatewayIntentBits } from "discord.js";
 
 // Required to load .env file.
 require("dotenv").config();
