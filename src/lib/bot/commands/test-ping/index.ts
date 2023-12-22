@@ -5,7 +5,7 @@ import {
 
 export = {
   data: new SlashCommandBuilder()
-    .setName("do-the-ping")
+    .setName("test-ping")
     .setDescription("Replies with do-the-Pong!"),
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply("Test do-the-Pong!");
