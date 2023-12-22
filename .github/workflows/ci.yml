@@ -1,0 +1,21 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run Command
+        run: |
+          # Now, you can run your desired command(s)
+          echo "Hello, world!"
+          # Add more commands as needed
+          npm run prod
