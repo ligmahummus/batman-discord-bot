@@ -15,9 +15,9 @@ export = {
     const server = await playerCount("play.eclipse-rp.net:22005");
     await interaction.reply(
       blockQuote(
-        `${bold("Server name")}: ${server?.name}\n${bold(
-          "Current player count"
-        )}: ${server?.players}`
+        `${bold("Server Information")}:\n\n${bold("Server name")}: ${
+          server?.name
+        }\n${bold("Current player count")}: ${server?.players}`
       )
     );
   },
