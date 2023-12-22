@@ -27,3 +27,6 @@ jobs:
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
           npm ci
           npm run compile
+      - name: Restart DiscordBOT proccess
+        run: |
+          pm2 restart DiscordBOT
