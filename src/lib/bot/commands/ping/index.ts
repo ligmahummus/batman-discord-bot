@@ -8,6 +8,6 @@ export = {
     .setName("ping")
     .setDescription("Replies with Pong!"),
   async execute(interaction: ChatInputCommandInteraction) {
-    await interaction.reply("Pong!");
+    await interaction.reply("Test Pong!");
   },
 };
