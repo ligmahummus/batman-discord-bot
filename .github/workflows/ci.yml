@@ -13,9 +13,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run Command
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14"
+
+      - name: Run Production Batch Command
         run: |
-          echo "Testing env variable access..."
-          env
-          echo "Testing env variable access done."
+          ls -l
           npm run prod
