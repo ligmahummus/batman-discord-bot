@@ -2,6 +2,7 @@
   "scripts": {
     "watch": "npx tsc -w",
     "dev": "npx nodemon ./dist/server.js",
+    "compile": "npx tsc",
     "prod": "npm i && npx tsc && node ./dist/server.js"
   },
   "devDependencies": {
