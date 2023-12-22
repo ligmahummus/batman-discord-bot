@@ -10,6 +10,8 @@ export const botConfig = {
   token: process.env.BOT_TOKEN || "",
   clientId: process.env.BOT_CLIENT_ID || "",
   clientSecret: process.env.BOT_CLIENT_SECRET || "",
+  guildId: process.env.BOT_SERVER_ID || "",
+  appId: process.env.BOT_APP_ID || "",
 };
 
 /**
