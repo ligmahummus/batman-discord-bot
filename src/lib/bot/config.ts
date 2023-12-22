@@ -1,7 +1,8 @@
 import { type ClientOptions, GatewayIntentBits } from "discord.js";
-
+import dotenv from "dotenv";
+import { clientLogger } from "../utils/util";
 // Required to load .env file.
-require("dotenv").config();
+dotenv.config();
 
 /**
  * Bot main configuration object.
@@ -13,6 +14,8 @@ export const botConfig = {
   guildId: process.env.BOT_SERVER_ID || "",
   appId: process.env.BOT_APP_ID || "",
 };
+
+clientLogger(JSON.stringify(botConfig, null, 2));
 
 /**
  * Client options for the Client Discord bot class.

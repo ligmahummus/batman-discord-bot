@@ -15,7 +15,4 @@ jobs:
 
       - name: Run Command
         run: |
-          # Now, you can run your desired command(s)
-          echo "Hello, world!"
-          # Add more commands as needed
           npm run prod
