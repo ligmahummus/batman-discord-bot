@@ -2,7 +2,7 @@
   "scripts": {
     "watch": "npx tsc -w",
     "dev": "npx nodemon ./dist/server.js",
-    "compile": "rmdir ./dist && npx tsc"
+    "compile": "npx tsc"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

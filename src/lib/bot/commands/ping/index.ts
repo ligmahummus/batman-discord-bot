@@ -5,9 +5,9 @@ import {
 
 export = {
   data: new SlashCommandBuilder()
-    .setName("ping")
-    .setDescription("Replies with Pong!"),
+    .setName("do-the-ping")
+    .setDescription("Replies with do-the-Pong!"),
   async execute(interaction: ChatInputCommandInteraction) {
-    await interaction.reply("Test Pong!");
+    await interaction.reply("Test do-the-Pong!");
   },
 };
