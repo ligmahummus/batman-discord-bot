@@ -13,12 +13,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
-
       - name: Run Production Batch Command
         run: |
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           ls -l
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          env
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
           npm run prod
