@@ -16,6 +16,6 @@ app.get("/", async (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(PORT, () => {
+app.listen(+PORT, () => {
   clientLogger(`Server listening on port ${PORT}`);
 });
