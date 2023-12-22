@@ -16,6 +16,6 @@ jobs:
       - name: Run Command
         run: |
           echo "Testing env variable access..."
-          echo $TEST
+          env
           echo "Testing env variable access done."
           npm run prod
