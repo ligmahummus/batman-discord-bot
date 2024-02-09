@@ -29,4 +29,4 @@ jobs:
           npm ci
       - name: Restart DiscordBOT proccess
         run: |
-          NODE_ENV=production && pm2 restart DiscordBOT
+          pm2 kill && pm2 start ./dist/server.js --name DiscordBOT --update-env NODE_ENV=production
