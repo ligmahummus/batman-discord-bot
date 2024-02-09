@@ -28,6 +28,4 @@ jobs:
           echo "$(<.env )"
           NODE_ENV=development && npm ci
           npm run compile
-      - name: Restart DiscordBOT proccess
-        run: |
           pm2 restart DiscordBOT --update-env
