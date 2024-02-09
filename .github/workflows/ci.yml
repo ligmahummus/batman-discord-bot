@@ -26,7 +26,8 @@ jobs:
           touch .env
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
           echo "$(<.env )"
-          npm ci
+          NODE_ENV=development && npm ci
+          npm run compile
       - name: Restart DiscordBOT proccess
         run: |
-          pm2 kill && pm2 start ./dist/server.js --name DiscordBOT --update-env NODE_ENV=production
+          pm2 restart DiscordBOT --update-env
