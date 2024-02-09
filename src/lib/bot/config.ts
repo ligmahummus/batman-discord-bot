@@ -39,6 +39,7 @@ export const botConfig = {
   clientSecret: clientSecret,
   guildId: guildId,
   appId: process.env.BOT_APP_ID || "",
+  eclipseIp: "play.eclipse-rp.net:22005",
 };
 
 clientLogger(JSON.stringify(botConfig, null, 2));

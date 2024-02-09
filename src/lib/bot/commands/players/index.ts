@@ -2,22 +2,32 @@ import {
   SlashCommandBuilder,
   blockQuote,
   type ChatInputCommandInteraction,
-  CacheType,
   bold,
 } from "discord.js";
 import { playerCount } from "../../../rp-service/rp.service";
+import { botConfig } from "../../config";
 
 export = {
   data: new SlashCommandBuilder()
     .setName("players")
     .setDescription("Replies with the current player count on Eclipse RP."),
   async execute(interaction: ChatInputCommandInteraction) {
-    const server = await playerCount("play.eclipse-rp.net:22005");
+    const server = await playerCount(botConfig.eclipseIp);
+    const serverFullName = server?.name || "N/A";
+
+    // Standardize server players if number is missing - to -1
+    const players = server?.players ? server.players : -1;
+
+    // Standardize server name without '[RP]' tags...
+    let serverName = serverFullName;
+
+    if (serverFullName !== "N/A") {
+      serverName = serverFullName.split("] ")[1].split(" [")[0];
+    }
+
     await interaction.reply(
       blockQuote(
-        `${bold("Server Information")}:\n\n${bold("Server name")}: ${
-          server?.name
-        }\n${bold("Current player count")}: ${server?.players}`
+        `${bold("Server")}: ${serverName}\n${bold("Players")}: ${players}`
       )
     );
   },

@@ -13,7 +13,7 @@ import { botConfig } from "./config";
 
 export class Bot extends Client {
   // Discord.js client instance.
-  private clientInstance: Client;
+  public clientInstance: Client;
   private commands: any[] = [];
 
   constructor(options: ClientOptions) {

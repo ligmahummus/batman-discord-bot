@@ -4,6 +4,8 @@ import { Bot } from "./lib/bot/bot-client";
 import { clientOptions } from "./lib/bot/config";
 import { clientLogger } from "./lib/utils/util";
 import path from "path";
+import "./lib/cron";
+import { Cron } from "./lib/cron";
 
 dotenv.config({
   path: path.join(__dirname, "../.env"),
@@ -34,4 +36,5 @@ app.post("/name", (req, res) => {
 
 app.listen(+PORT, () => {
   clientLogger(`Server listening on port ${PORT}`);
+  Cron.start();
 });
