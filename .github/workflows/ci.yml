@@ -27,7 +27,8 @@ jobs:
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
           echo "$(<.env )"
           npm ci
-          npm i typescript
+          npm uninstall tsc
+          npm i -D typescript
           npm run compile
       - name: Restart DiscordBOT proccess
         run: |
