@@ -24,11 +24,11 @@ jobs:
       - name: Run Production Batch Command
         run: |
           touch .env
-          export NODE_ENV=production
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
           echo "$(<.env )"
           npm ci
           npm run compile
+          export NODE_ENV=production
       - name: Restart DiscordBOT proccess
         run: |
           pm2 restart DiscordBOT
