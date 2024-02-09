@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === "production") {
 
   token = process.env.BOT_TOKEN || "";
   clientId = process.env.BOT_CLIENT_ID || "";
-  clientSecret = process.env.BOT_SECRET_ID_DEV || "";
+  clientSecret = process.env.BOT_SECRET_ID || "";
   guildId = process.env.BOT_SERVER_ID || "";
 } else {
   clientLogger("Running in development mode.");
