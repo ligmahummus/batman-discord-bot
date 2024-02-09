@@ -24,6 +24,7 @@ jobs:
       - name: Run Production Batch Command
         run: |
           touch .env
+          export NODE_ENV=production
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
           echo "$(<.env )"
           npm ci
