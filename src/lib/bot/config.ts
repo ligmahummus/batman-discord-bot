@@ -1,8 +1,12 @@
 import { type ClientOptions, GatewayIntentBits } from "discord.js";
 import dotenv from "dotenv";
 import { clientLogger } from "../utils/util";
+import path from "path";
+
 // Required to load .env file.
-dotenv.config();
+dotenv.config({
+  path: path.join(__dirname, "../../../.env"),
+});
 
 let token: string = "";
 let clientId: string = "";

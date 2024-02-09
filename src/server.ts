@@ -3,7 +3,11 @@ import dotenv from "dotenv";
 import { Bot } from "./lib/bot/bot-client";
 import { clientOptions } from "./lib/bot/config";
 import { clientLogger } from "./lib/utils/util";
-dotenv.config();
+import path from "path";
+
+dotenv.config({
+  path: path.join(__dirname, "../.env"),
+});
 
 const app = express();
 app.use(express.json());
