@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 export const clientBot: Bot = new Bot(clientOptions);
 export let name = "dude";
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 42069;
 
 app.get("/", async (req, res) => {
   res.send("Hello World!");
