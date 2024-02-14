@@ -15,7 +15,7 @@ export class Cron {
       pc.check().finally(() => {
         clientLogger(
           `Players checker ended and it took ${
-            (Date.now() - start) * 1000
+            (Date.now() - start) / 1000
           } seconds.`
         );
       });
