@@ -1,9 +1,10 @@
 import fs from "fs";
 import path from "path";
 import {
+  type TextChannel,
+  type ClientOptions,
   Client,
   Events,
-  type ClientOptions,
   Collection,
   REST,
   Routes,
@@ -127,5 +128,13 @@ export class Bot extends Client {
       // And of course, make sure you catch and log any errors!
       console.error(error);
     }
+  }
+
+  public sendMessage(roomId: string, message: string): void {
+    (this.clientInstance.channels.cache.get(roomId) as TextChannel)?.send(
+      message
+    );
+
+    clientLogger(`Bot send message: \"${message}\" to room ${roomId}.`);
   }
 }
