@@ -4,6 +4,7 @@ import {
   getPlayers,
   minimumPlayersNotification,
 } from "../rp-service/rp.service";
+import { BuildMessage } from "../utils/build-message";
 import { clientLogger } from "../utils/util";
 import {
   blockQuote,
@@ -18,17 +19,16 @@ import {
  * to notify all users to when that min-players has crossed.
  */
 export class PlayerChecker {
+  // private roomId = "1182102002298277888"; // General channel
+  private roomId = "1207111946877272224"; // test channel
   private minPlayers: number = -1;
   private previousPlayers: {
-    time: number;
+    time: string;
     players: number;
   } = {
-    time: 0,
+    time: "",
     players: 0,
   };
-
-  private roomId = "1182102002298277888"; // General channel
-  // private roomId = "1207111946877272224"; // test channel
 
   constructor() {
     this.minPlayers = minimumPlayersNotification;
@@ -38,12 +38,12 @@ export class PlayerChecker {
     const players = await getPlayers(botConfig.eclipseIp);
 
     clientLogger(
-      `Player count now is ${players}. Previous at ${new Date(
-        this.previousPlayers.time
-      ).toISOString()} was ${this.previousPlayers.players}.`
+      `Player count now is ${players}. Previous at ${this.previousPlayers.time} was ${this.previousPlayers.players}.`
     );
 
     if (!this.isPlayersOkay(players)) return;
+
+    const msg = new BuildMessage();
 
     const usersToMention = [
       "354559995854979072", // Oran
@@ -51,35 +51,32 @@ export class PlayerChecker {
       "413029556132380674", // Itay
     ];
 
-    const botMessage = quote(
-      `Eclipse Roleplay (${botConfig.eclipseIp}) is now at ${bold(
-        underscore(players.toString())
-      )} players!\n`
+    msg.addMessage(
+      `Eclipse Roleplay is now at ${BuildMessage.boldUnderscore(
+        players.toString()
+      )} players!`
     );
 
-    let previousMessage = "";
-
     if (
-      this.previousPlayers.time > 0 &&
+      this.previousPlayers.time !== "" &&
       this.previousPlayers.players > 0 &&
       players !== this.previousPlayers.players
     ) {
-      previousMessage = blockQuote(
-        `\nPrevious player count was ${this.previousPlayers.players.toString()} at ${new Date(
+      msg.addMessage(
+        `- Previous player count was ${this.previousPlayers.players.toString()} at ${
           this.previousPlayers.time
-        ).toLocaleString("he-il")}.`
+        }.`
       );
     }
 
-    clientBot.sendMessage(
-      this.roomId,
-      `${usersToMention.map((uid: string) => userMention(uid))}\n` +
-        botMessage +
-        previousMessage
+    msg.addMessage(
+      usersToMention.map((uid: string) => userMention(uid)).join(",")
     );
 
+    clientBot.sendMessage(this.roomId, blockQuote(msg.build()));
+
     this.previousPlayers = {
-      time: Date.now(),
+      time: new Date().toLocaleString("he-il", { timeZone: "Asia/Jerusalem" }),
       players: players,
     };
   }
