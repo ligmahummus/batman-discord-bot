@@ -19,7 +19,7 @@ import {
  * to notify all users to when that min-players has crossed.
  */
 export class PlayerChecker {
-  // private roomId = "1182102002298277888"; // General channel
+  // private roomId = "1207363497537577102"; // marian-bot channel
   private roomId = "1207111946877272224"; // test channel
   private minPlayers: number = -1;
   private previousPlayers: {
@@ -69,9 +69,9 @@ export class PlayerChecker {
       );
     }
 
-    msg.addMessage(
-      usersToMention.map((uid: string) => userMention(uid)).join(",")
-    );
+    // msg.addMessage(
+    //   usersToMention.map((uid: string) => userMention(uid)).join(",")
+    // );
 
     clientBot.sendMessage(this.roomId, blockQuote(msg.build()));
 
