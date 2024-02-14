@@ -4,7 +4,9 @@ import cron from "node-cron";
 
 export class Cron {
   public static start() {
-    const time = "*/150 * * * * *";
+    const halfHour = 60 * 30;
+    const tenSeconds = 10;
+    const time = `*/${halfHour} * * * * *`;
     // console.log(cron.validate(time));
     const pc = new PlayerChecker();
     cron.schedule(time, () => {

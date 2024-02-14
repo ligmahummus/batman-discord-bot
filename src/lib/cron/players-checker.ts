@@ -6,12 +6,10 @@ import {
 } from "../rp-service/rp.service";
 import { clientLogger } from "../utils/util";
 import {
-  hyperlink,
   blockQuote,
   quote,
   bold,
   underscore,
-  roleMention,
   userMention,
 } from "@discordjs/formatters";
 
@@ -21,8 +19,14 @@ import {
  */
 export class PlayerChecker {
   private minPlayers: number = -1;
-  private checked: boolean = false;
-  private previousPlayers: number = -1;
+  private previousPlayers: {
+    time: number;
+    players: number;
+  } = {
+    time: 0,
+    players: 0,
+  };
+
   private roomId = "1182102002298277888"; // General channel
   // private roomId = "1207111946877272224"; // test channel
 
@@ -32,41 +36,55 @@ export class PlayerChecker {
 
   public async check() {
     const players = await getPlayers(botConfig.eclipseIp);
-    this.previousPlayers = players > -1 ? players : this.previousPlayers;
 
-    clientLogger(`Players checker result: ${players}`);
+    clientLogger(
+      `Player count now is ${players}. Previous at ${new Date(
+        this.previousPlayers.time
+      ).toISOString()} was ${this.previousPlayers.players}.`
+    );
 
-    if (this.checkPlayers(players) && !this.checked) {
-      // Emit message
-      this.toggleChecked();
+    if (!this.isPlayersOkay(players)) return;
 
-      const usersToMention = [
-        "354559995854979072", // Oran
-        "148112076613746689", // Ariel
-        "413029556132380674", // Itay
-      ];
+    const usersToMention = [
+      "354559995854979072", // Oran
+      "148112076613746689", // Ariel
+      "413029556132380674", // Itay
+    ];
 
-      clientBot.sendMessage(
-        this.roomId,
-        `${usersToMention.map((uid: string) => userMention(uid))}\n` +
-          quote(
-            `Eclipse Roleplay (${botConfig.eclipseIp}) is now at ${bold(
-              underscore(players.toString())
-            )} players!\n`
-          )
+    const botMessage = quote(
+      `Eclipse Roleplay (${botConfig.eclipseIp}) is now at ${bold(
+        underscore(players.toString())
+      )} players!\n`
+    );
+
+    let previousMessage = "";
+
+    if (
+      this.previousPlayers.time > 0 &&
+      this.previousPlayers.players > 0 &&
+      players !== this.previousPlayers.players
+    ) {
+      previousMessage = blockQuote(
+        `\nPrevious player count was ${this.previousPlayers.players.toString()} at ${new Date(
+          this.previousPlayers.time
+        ).toLocaleString("he-il")}.`
       );
-    } else if (!this.checkPlayers(players) && this.checked) {
-      // Do not emit but toggle
-      this.toggleChecked();
     }
+
+    clientBot.sendMessage(
+      this.roomId,
+      `${usersToMention.map((uid: string) => userMention(uid))}\n` +
+        botMessage +
+        previousMessage
+    );
+
+    this.previousPlayers = {
+      time: Date.now(),
+      players: players,
+    };
   }
 
-  private checkPlayers(players: number): boolean {
+  private isPlayersOkay(players: number): boolean {
     return players <= this.minPlayers;
-  }
-
-  private toggleChecked(): void {
-    this.checked = !this.checked;
-    clientLogger(`Send status is now ${this.checked}`);
   }
 }
