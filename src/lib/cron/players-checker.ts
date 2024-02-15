@@ -19,8 +19,8 @@ import {
  * to notify all users to when that min-players has crossed.
  */
 export class PlayerChecker {
-  // private roomId = "1207363497537577102"; // marian-bot channel
-  private roomId = "1207111946877272224"; // test channel
+  private roomId = "1207363497537577102"; // marian-bot channel
+  // private roomId = "1207111946877272224"; // test channel
   private minPlayers: number = -1;
   private previousPlayers: {
     time: string;
