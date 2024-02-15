@@ -82,6 +82,6 @@ export class PlayerChecker {
   }
 
   private isPlayersOkay(players: number): boolean {
-    return players <= this.minPlayers;
+    return players <= this.minPlayers && players > 0;
   }
 }
