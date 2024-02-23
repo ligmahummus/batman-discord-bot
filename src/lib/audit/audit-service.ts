@@ -19,7 +19,7 @@ export default class AuditService {
   }
 
   public static async log(players: number) {
-    const now = new Date().setHours(new Date().getHours() + 2);
+    const now = new Date();
     clientLogger(`Logging audit for ${players} players at ${now}.`);
     await this.saveAudit(players, now.toString());
   }
