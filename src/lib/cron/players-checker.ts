@@ -1,4 +1,5 @@
 import { clientBot } from "../../server";
+import AuditService from "../audit/audit-service";
 import { botConfig } from "../bot/config";
 import {
   getPlayers,
@@ -40,6 +41,8 @@ export class PlayerChecker {
     clientLogger(
       `Player count now is ${players}. Previous at ${this.previousPlayers.time} was ${this.previousPlayers.players}.`
     );
+
+    AuditService.log(players);
 
     if (!this.isPlayersOkay(players)) return;
 
