@@ -42,5 +42,5 @@ app.post("/name", (req, res) => {
 app.listen(+PORT, () => {
   clientLogger(`Server listening on port ${PORT}`);
   AuditService.connect();
-  Cron.start();
+  // Cron.start();
 });

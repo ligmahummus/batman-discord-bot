@@ -71,6 +71,12 @@ export class Bot extends Client {
     });
   }
 
+  private async refresCommandFromCache(path: string, command: string) {
+    delete require.cache[require.resolve(path)];
+    const newCommand = require(path);
+    (this.clientInstance as any).commands.set(command, newCommand);
+  }
+
   /**
    * Event listener for when the client is ready.
    */
@@ -79,26 +85,19 @@ export class Bot extends Client {
     const commandFolders = fs.readdirSync(foldersPath);
 
     for (const folder of commandFolders) {
-      const commandsPath = path.join(foldersPath, folder);
+      const commandsPath = path.join(foldersPath, folder, "index.js");
 
-      const commandFiles = fs
-        .readdirSync(commandsPath)
-        .filter((file) => file.endsWith(".js"));
+      const command = require(commandsPath);
 
-      for (const file of commandFiles) {
-        const filePath = path.join(commandsPath, file);
-        const command = require(filePath);
-
-        // Set a new item in the Collection with the key as the command name and the value as the exported module
-        if ("data" in command && "execute" in command) {
-          (this.clientInstance as any).commands.set(command.data.name, command);
-          this.commands.push(command.data.toJSON());
-        } else {
-          clientLogger(
-            `The command at ${filePath} is missing a required "data" or "execute" property.`,
-            "warn"
-          );
-        }
+      // Set a new item in the Collection with the key as the command name and the value as the exported module
+      if ("data" in command && "execute" in command) {
+        (this.clientInstance as any).commands.set(command.data.name, command);
+        this.commands.push(command.data.toJSON());
+      } else {
+        clientLogger(
+          `The command at ${commandsPath} is missing a required "data" or "execute" property.`,
+          "warn"
+        );
       }
     }
   }
