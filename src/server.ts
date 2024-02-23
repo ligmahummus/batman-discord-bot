@@ -7,6 +7,7 @@ import path from "path";
 import "./lib/cron";
 import { Cron } from "./lib/cron";
 import AuditService from "./lib/audit/audit-service";
+import auditController from "./controller/audit-controller";
 
 dotenv.config({
   path: path.join(__dirname, "../.env"),
@@ -15,12 +16,15 @@ dotenv.config({
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../static")));
 
 // Main source of the bot instance.
 export const clientBot: Bot = new Bot(clientOptions);
 export let name = "dude";
 
 const PORT = process.env.PORT || 42069;
+
+app.use("/api/audit", auditController);
 
 app.get("/", async (req, res) => {
   res.send("Hello World!");

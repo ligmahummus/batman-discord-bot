@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Marian Bot Data Display</title>
+</head>
+
+<body class="bg-zinc-900 text-white flex items-center flex-col w-full">
+    <header class="p-3">
+        <nav>
+            <a href="https://github.com/xarielah?tab=repositories" target="_blank">xarielah</a>
+        </nav>
+    </header>
+    <main class="max-w-3xl w-full mx-auto">
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const res = fetch('/api/audit').then(res => res.json()).then(getGraph)
+
+
+        function getGraph({ data }) {
+            const ctx = document.getElementById('myChart');
+
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => new Date(d.time).toTimeString().split(' ')[0].split(':').slice(0, 2).join(':')),
+                    datasets: [{
+                        label: '# of Votes',
+                        data: data.map(d => d.players),
+                        borderWidth: .2
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+
+    </script>
+</body>
+
+</html>
