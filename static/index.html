@@ -43,6 +43,18 @@
          a {
             @apply font-bold underline hover:text-red-200/80 duration-300 ease-in-out;
          }
+
+         .subs-list {
+            @apply flex flex-wrap gap-2 justify-center;
+         }
+
+         .subs-list li {
+            @apply flex items-center flex-row-reverse gap-2 text-gray-400 text-lg;
+         }
+
+         .sub-avatar {
+            @apply w-8 h-8 rounded-full;
+         }
     </style>
 </head>
 
@@ -67,11 +79,10 @@
         </div>
 
         <section>
-            <h4>Subscribed</h4>
+            <h3>Notification Subscribers</h3>
+            <p>People who subscribed to the bot's notification are listed below with their username and avatars.</p>
             <div>
-                <ul id="subs">
-
-                </ul>
+                <ul id="subs" class="subs-list"></ul>
             </div>
         </section>
     </main>
@@ -157,10 +168,13 @@
             if (Array.isArray(data)) {
                 data.forEach(sub => {
                     const li = document.createElement('li');
-                    li.innerText = sub;
+                    const img = document.createElement('img');
+                    img.classList.add("sub-avatar")
+                    img.src = sub.avatar;
+                    li.innerText = sub.username;
+                    li.appendChild(img);
                     subsEle.appendChild(li);
                 })
-                console.log("🚀 ~ setSubs ~ sub:", sub)
             }
 
             return data;

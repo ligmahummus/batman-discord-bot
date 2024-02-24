@@ -64,7 +64,6 @@ export class PlayerChecker {
     }
 
     const usersToMention = await SubscriberService.getSubscribers();
-    console.log("🚀 ~ PlayerChecker ~ check ~ usersToMention:", usersToMention);
 
     msg.addMessage(
       usersToMention.map((uid: string) => userMention(uid)).join(",")

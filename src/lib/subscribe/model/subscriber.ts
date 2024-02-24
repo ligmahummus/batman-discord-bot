@@ -13,8 +13,7 @@ const subscriberSchema = new Schema(
     },
     avatar: {
       type: String,
-      default:
-        "https://i.pinimg.com/474x/5c/be/a6/5cbea638934c3a0181790c16a7832179.jpg",
+      required: true,
     },
     subscribed: {
       type: Boolean,
