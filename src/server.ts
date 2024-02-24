@@ -8,6 +8,7 @@ import "./lib/cron";
 import { Cron } from "./lib/cron";
 import AuditService from "./lib/audit/audit-service";
 import auditController from "./controller/audit-controller";
+import { PlayerChecker } from "./lib/check-players/players-checker.service";
 
 dotenv.config({
   path: path.join(__dirname, "../.env"),
@@ -42,5 +43,5 @@ app.post("/name", (req, res) => {
 app.listen(+PORT, () => {
   clientLogger(`Server listening on port ${PORT}`);
   AuditService.connect();
-  // Cron.start();
+  Cron.start();
 });

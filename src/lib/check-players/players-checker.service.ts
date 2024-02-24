@@ -5,23 +5,18 @@ import {
   getPlayers,
   minimumPlayersNotification,
 } from "../rp-service/rp.service";
+import { SubscriberService } from "../subscribe/subscriber.service";
 import { BuildMessage } from "../utils/build-message";
 import { clientLogger } from "../utils/util";
-import {
-  blockQuote,
-  quote,
-  bold,
-  underscore,
-  userMention,
-} from "@discordjs/formatters";
+import { blockQuote, userMention } from "@discordjs/formatters";
+import checkerConfig from "./checker.config";
 
 /**
  * Accepts a number of min players, and runs a cron job
  * to notify all users to when that min-players has crossed.
  */
 export class PlayerChecker {
-  private roomId = "1207363497537577102"; // marian-bot channel
-  // private roomId = "1207111946877272224"; // test channel
+  private state: boolean = true;
   private minPlayers: number = -1;
   private previousPlayers: {
     time: string;
@@ -36,6 +31,8 @@ export class PlayerChecker {
   }
 
   public async check() {
+    if (!this.state)
+      return clientLogger("Checking players service is OFF", "warn");
     const players = await getPlayers(botConfig.eclipseIp);
 
     clientLogger(
@@ -47,12 +44,6 @@ export class PlayerChecker {
     if (!this.isPlayersOkay(players)) return;
 
     const msg = new BuildMessage();
-
-    const usersToMention = [
-      "354559995854979072", // Oran
-      "148112076613746689", // Ariel
-      "413029556132380674", // Itay
-    ];
 
     msg.addMessage(
       `Eclipse Roleplay is now at ${BuildMessage.boldUnderscore(
@@ -72,11 +63,14 @@ export class PlayerChecker {
       );
     }
 
-    // msg.addMessage(
-    //   usersToMention.map((uid: string) => userMention(uid)).join(",")
-    // );
+    const usersToMention = await SubscriberService.getSubscribers();
+    console.log("🚀 ~ PlayerChecker ~ check ~ usersToMention:", usersToMention);
 
-    clientBot.sendMessage(this.roomId, blockQuote(msg.build()));
+    msg.addMessage(
+      usersToMention.map((uid: string) => userMention(uid)).join(",")
+    );
+
+    clientBot.sendMessage(checkerConfig.roomId, blockQuote(msg.build()));
 
     this.previousPlayers = {
       time: new Date().toLocaleString("he-il", { timeZone: "Asia/Jerusalem" }),

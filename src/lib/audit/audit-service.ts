@@ -4,7 +4,11 @@ import auditConfig from "./audit-config";
 import Audit from "./model/audit-model";
 
 export default class AuditService {
+  private static state: boolean = true;
+
   public static connect() {
+    if (!this.state) clientLogger("Audit service is OFF", "warn");
+
     clientLogger("Connecting to audit service...");
     if (!auditConfig.mongoUri) throw new Error("Mongo URI is not defined");
 
@@ -19,6 +23,11 @@ export default class AuditService {
   }
 
   public static async log(players: number) {
+    if (!this.state)
+      return clientLogger(
+        "Audit service is OFF and cannot log any new records.",
+        "warn"
+      );
     const now = new Date();
     clientLogger(`Logging audit for ${players} players at ${now}.`);
     await this.saveAudit(players, now.toString());

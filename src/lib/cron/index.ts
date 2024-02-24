@@ -1,9 +1,13 @@
 import { clientLogger } from "../utils/util";
-import { PlayerChecker } from "./players-checker";
+import { PlayerChecker } from "../check-players/players-checker.service";
 import cron from "node-cron";
 
 export class Cron {
+  private static state: boolean = true;
+
   public static start() {
+    if (!this.state) return clientLogger("Cron job service is OFF", "warn");
+
     const time = `*/15 * * * *`;
 
     const pc = new PlayerChecker();

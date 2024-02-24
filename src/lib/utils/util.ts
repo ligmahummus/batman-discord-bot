@@ -21,7 +21,11 @@ export function clientLogger(text: string, type?: MessageType): void {
       break;
   }
 
-  console.log(`[MARIAN-BOT - ${suffix} - ${time}] ${text}`);
+  console.log(
+    `[MARIAN-BOT - ${suffix} - ${time}] ${
+      type === "warn" ? "!! >> " : ""
+    }${text}`
+  );
 }
 
 type MessageType = "info" | "warn" | "error";

@@ -5,27 +5,26 @@ import {
   type ClientOptions,
   Client,
   Events,
-  Collection,
   REST,
   Routes,
 } from "discord.js";
 import { clientLogger } from "../utils/util";
 import { botConfig } from "./config";
+import DiscordBot from "./discord-client";
 
-export class Bot extends Client {
+export class Bot extends DiscordBot {
   // Discord.js client instance.
-  public clientInstance: Client;
-  private commands: any[] = [];
+  public clientInstance: DiscordBot;
+  private commandsArray: any[] = [];
 
   constructor(options: ClientOptions) {
     super(options);
 
     // Initialize the client instance.
-    this.clientInstance = new Client(options);
+    this.clientInstance = new DiscordBot(options);
     this.clientInstance.login(botConfig.token); // Login to the client instance.
 
     // Set the commands collection to the client instance.
-    (this.clientInstance as any).commands = new Collection();
     this.loadCommands();
     this.refreshRegisteredCommands();
 
@@ -40,7 +39,7 @@ export class Bot extends Client {
     this.clientInstance.on(Events.InteractionCreate, async (interaction) => {
       if (!interaction.isChatInputCommand()) return;
 
-      const command = (interaction.client as any).commands.get(
+      const command = (interaction.client as DiscordBot).commands.get(
         interaction.commandName
       );
 
@@ -71,12 +70,6 @@ export class Bot extends Client {
     });
   }
 
-  private async refresCommandFromCache(path: string, command: string) {
-    delete require.cache[require.resolve(path)];
-    const newCommand = require(path);
-    (this.clientInstance as any).commands.set(command, newCommand);
-  }
-
   /**
    * Event listener for when the client is ready.
    */
@@ -91,8 +84,8 @@ export class Bot extends Client {
 
       // Set a new item in the Collection with the key as the command name and the value as the exported module
       if ("data" in command && "execute" in command) {
-        (this.clientInstance as any).commands.set(command.data.name, command);
-        this.commands.push(command.data.toJSON());
+        this.clientInstance.commands.set(command.data.name, command);
+        this.commandsArray.push(command.data.toJSON());
       } else {
         clientLogger(
           `The command at ${commandsPath} is missing a required "data" or "execute" property.`,
@@ -109,13 +102,13 @@ export class Bot extends Client {
     // and deploy your commands!
     try {
       clientLogger(
-        `Started refreshing ${this.commands.length} application (/) commands.`
+        `Started refreshing ${this.commandsArray.length} application (/) commands.`
       );
 
       // The put method is used to fully refresh all commands in the guild with the current set
       const data = await rest.put(
         Routes.applicationGuildCommands(botConfig.clientId, botConfig.guildId),
-        { body: this.commands }
+        { body: this.commandsArray }
       );
 
       clientLogger(
