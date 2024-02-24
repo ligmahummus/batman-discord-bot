@@ -66,6 +66,14 @@
             <canvas id="myChart"></canvas>
         </div>
 
+        <section>
+            <h4>Subscribed</h4>
+            <div>
+                <ul id="subs">
+
+                </ul>
+            </div>
+        </section>
     </main>
     <footer class="p-4 text-center flex items-center justify-center flex-col gap-2">
         <p>For contacting with me please use <a target="_blank" href="mailto:xarielah@gmail.com">xarielah@gmail.com</a>
@@ -138,7 +146,25 @@
             return data;
         }
 
+        const subs = fetch('/api/subs')
+            .then(res => res.json())
+            .then(res => res.data)
+            .then(setSubs)
 
+        function setSubs(data) {
+            const subsEle = document.getElementById('subs');
+
+            if (Array.isArray(data)) {
+                data.forEach(sub => {
+                    const li = document.createElement('li');
+                    li.innerText = sub;
+                    subsEle.appendChild(li);
+                })
+                console.log("🚀 ~ setSubs ~ sub:", sub)
+            }
+
+            return data;
+        }
     </script>
 </body>
 

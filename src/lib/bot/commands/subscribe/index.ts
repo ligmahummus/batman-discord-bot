@@ -17,7 +17,14 @@ export = {
     const userPayload: SubUser = {
       id: interaction.user.id,
       username: interaction.user.username,
+      avatar: interaction.user.avatar
+        ? SubscriberService.getAvatarUrl(
+            interaction.user.id,
+            interaction.user.avatar
+          )
+        : "https://i.pinimg.com/474x/5c/be/a6/5cbea638934c3a0181790c16a7832179.jpg",
     };
+
     if (await SubscriberService.handleSubscribe(userPayload)) {
       interaction.reply({
         content: `You successfully subscribed to the bot's notifications. :partying_face:`,

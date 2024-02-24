@@ -8,7 +8,7 @@ import "./lib/cron";
 import { Cron } from "./lib/cron";
 import AuditService from "./lib/audit/audit-service";
 import auditController from "./controller/audit-controller";
-import { PlayerChecker } from "./lib/check-players/players-checker.service";
+import subsController from "./controller/subs-controller";
 
 dotenv.config({
   path: path.join(__dirname, "../.env"),
@@ -26,6 +26,7 @@ export let name = "dude";
 const PORT = process.env.PORT || 42069;
 
 app.use("/api/audit", auditController);
+app.use("/api/subs", subsController);
 
 app.get("/", async (req, res) => {
   res.send("Hello World!");

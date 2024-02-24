@@ -1,10 +1,14 @@
 import Subscriber from "./model/subscriber";
 
 export class SubscriberService {
-  private static async subscribe(id: string, username: string): Promise<void> {
+  private static async subscribe(
+    id: string,
+    username: string,
+    avatar: string
+  ): Promise<void> {
     try {
       if (await this.getSubscriber(id)) {
-        await this.setSubscribe(id, true);
+        await this.setSubscribe(id, true, avatar);
       } else {
         const subscriber = new Subscriber({ id, username, subscribed: true });
         await subscriber.save();
@@ -34,10 +38,12 @@ export class SubscriberService {
 
   private static async setSubscribe(
     id: string,
-    subscribed: boolean
+    subscribed: boolean,
+    avatar?: string
   ): Promise<void> {
     try {
-      await Subscriber.findOneAndUpdate({ id }, { subscribed });
+      const payload = avatar ? { subscribed, avatar } : { subscribed };
+      await Subscriber.findOneAndUpdate({ id }, payload);
     } catch (error) {
       throw new Error("Error setting subscription status");
     }
@@ -64,7 +70,7 @@ export class SubscriberService {
     if (isSub) {
       await this.unsubscribe(user.id);
     } else {
-      await this.subscribe(user.id, user.username);
+      await this.subscribe(user.id, user.username, user.avatar);
     }
 
     return !isSub;
@@ -78,11 +84,25 @@ export class SubscriberService {
       return [];
     }
   }
+
+  public static getAvatarUrl(id: string, avatar: string): string {
+    return `https://cdn.discordapp.com/avatars/${id}/${avatar}.webp?size=128`;
+  }
+
+  public static async getSubscribersByUsername(): Promise<string[]> {
+    try {
+      const subscribers = await Subscriber.find({ subscribed: true });
+      return subscribers.map((sub) => sub.username);
+    } catch (error) {
+      return [];
+    }
+  }
 }
 
 export type SubUser = {
   id: string;
   username: string;
+  avatar: string;
   subscribed?: boolean;
 };
 
