@@ -109,23 +109,25 @@
 
         const res = fetch('/api/audit')
             .then(res => res.json())
-            .then(res => res.data)
             .then(getGraph)
             .then(setDataIntegrity)
 
-        function setDataIntegrity(data) {
+        function setDataIntegrity(res) {
+            const { data, start, end } = res
             const first = document.getElementById('first');
             const last = document.getElementById('last');
-
-            if (Array.isArray(data)) {
-                first.innerText = new Date(data[0].time).toLocaleString("he-IL");
-                last.innerText = new Date(data[data.length - 1].time).toLocaleString("he-IL");
+            console.log(start)
+            console.log(end)
+            if (start && end) {
+                first.innerText = new Date(start).toLocaleDateString("he-IL");
+                last.innerText = new Date(end).toLocaleDateString("he-IL");
             }
 
-            return data;
+            return res;
         }
 
-        function getGraph(data) {
+        function getGraph(res) {
+            const { data } = res;
             const ctx = document.getElementById('myChart');
             new Chart(ctx, {
                 type: 'bar',
@@ -154,7 +156,7 @@
                 }
             });
 
-            return data;
+            return res;
         }
 
         const subs = fetch('/api/subs')
