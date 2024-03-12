@@ -1,6 +1,6 @@
-import { clientLogger } from "../utils/util";
-import { PlayerChecker } from "../check-players/players-checker.service";
 import cron from "node-cron";
+import { PlayerChecker } from "../check-players/players-checker.service";
+import { clientLogger } from "../utils/util";
 
 export class Cron {
   private static state: boolean = true;
@@ -13,14 +13,18 @@ export class Cron {
     const pc = new PlayerChecker();
     cron.schedule(time, () => {
       const start = Date.now();
-      clientLogger("Players checker started.");
-      pc.check().finally(() => {
+      try {
+        clientLogger("Players checker started.");
+        const data = pc.check();
+      } catch (error) {
+        console.error(error);
+      } finally {
         clientLogger(
           `Players checker ended and it took ${
             (Date.now() - start) / 1000
           } seconds.`
         );
-      });
+      }
     });
   }
 }

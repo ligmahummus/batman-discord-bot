@@ -15,8 +15,14 @@ export class DataAvarage {
         this.runCache[hour] = this.data.length - 1;
       }
     }
+    const sortedData = this.sortData(this.data);
+    return sortedData;
+  }
 
-    return this.data;
+  private static sortData(data: PlayersInput[]): PlayersInput[] {
+    return data.sort((a, b) => {
+      return new Date(a.time).getHours() - new Date(b.time).getHours();
+    });
   }
 
   private static getDatesTime(date: string): string {
@@ -28,7 +34,7 @@ export class DataAvarage {
   }
 }
 
-type PlayersInput = {
+export type PlayersInput = {
   players: number;
   time: string;
 };

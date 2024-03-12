@@ -22,15 +22,17 @@ export default class AuditService {
       });
   }
 
-  public static async log(players: number) {
-    if (!this.state)
-      return clientLogger(
+  public static async log(players: number): Promise<boolean> {
+    if (!this.state) {
+      clientLogger(
         "Audit service is OFF and cannot log any new records.",
         "warn"
       );
+      return false;
+    }
     const now = new Date();
     clientLogger(`Logging audit for ${players} players at ${now}.`);
-    await this.saveAudit(players, now.toString());
+    return await this.saveAudit(players, now.toString());
   }
 
   private static async saveAudit(

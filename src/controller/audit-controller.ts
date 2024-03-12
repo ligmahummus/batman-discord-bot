@@ -1,18 +1,14 @@
 import { Router } from "express";
+import { localCache } from "../lib/singleton/singleton";
 const router = Router();
-import Audit from "../lib/audit/model/audit-model";
-import { DataAvarage } from "../lib/utils/data-avarage";
 
 router.get("/", async (_, res) => {
   try {
-    const audits = await Audit.find().select({ _id: 0, __v: 0 });
-    res
-      .status(200)
-      .json({
-        start: audits[0].time,
-        end: audits[audits.length - 1].time,
-        data: DataAvarage.avarage(audits),
-      });
+    // Get the data from the singleton,
+    // if it's not there, it will revalidate the cache and return the data.
+    const response = await localCache.getData();
+
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ message: "Couldn't get audits" });
   }
