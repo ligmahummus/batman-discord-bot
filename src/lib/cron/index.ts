@@ -1,5 +1,6 @@
 import cron from "node-cron";
 import { PlayerChecker } from "../check-players/players-checker.service";
+import { RevalidateCache } from "../singleton/revalidate-cache";
 import { clientLogger } from "../utils/util";
 
 export class Cron {
@@ -10,12 +11,13 @@ export class Cron {
 
     const time = `*/15 * * * *`;
 
-    const pc = new PlayerChecker();
     cron.schedule(time, () => {
       const start = Date.now();
       try {
         clientLogger("Players checker started.");
-        const data = pc.check();
+        new PlayerChecker()
+          .check()
+          .then(() => RevalidateCache.revalidateCachedLogs());
       } catch (error) {
         console.error(error);
       } finally {
